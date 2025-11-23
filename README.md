@@ -16,7 +16,7 @@ import DataroomElement from "https://unpkg.com/dataroom-js@0.7.5/src/index.js";
 
 ## Basic Usage
 
-To use `DataroomElement`, extend it to create your own custom components.
+Extend `DataroomElement` to create your own custom components.
 
 ### Extending `DataroomElement`
 
