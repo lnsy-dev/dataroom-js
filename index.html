@@ -5,134 +5,78 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>dataroom.js Demo</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;500&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
 
-  <!-- highlight.js Stylesheet (Atom One Dark Theme) -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
+  <!-- Site theme + layout -->
+  <link rel="stylesheet" href="https://lnsy-dev.github.io/styles/dataroom-theme.css">
+  <link rel="stylesheet" href="https://lnsy-dev.github.io/styles/layout.css">
+
+  <!-- highlight.js Stylesheet — dual theme, follows prefers-color-scheme -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css" media="(prefers-color-scheme: light)">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css" media="(prefers-color-scheme: dark)">
   <script src="https://lnsy-dev.github.io/simple-github-icon/github-icon.min.js"></script>
 
 
   <!-- Page Styles -->
   <style>
-
-    @import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@300..700&display=swap');
-
-
-:root {
-      --bg-color: #0f172a;
-    --fg-color: #f8fafc;
-    --highlight-color: #FE7400;
-    --secondary-color: #1e293b;
-    --trinary-color: #475569;
-    --quaternary-color: #334155;
-    --confirmation-color: #3b82f6;
-    --notification-color: #94a3b8;
-    --inactive-color: #475569;
-    --warning-color: #f59e0b;
-    --error-color: #ff6b6b;
-    --neutral-color: #1e293b;
-    --accent-h: 217;
-    --accent-s: 91%;
-    --accent-l: 60%;
-    --text-on-accent: white;
-    --slider-track-background: var(--neutral-color);
-    --slider-thumb-border-color: var(--fg-color);
-    --toggle-thumb-color: var(--fg-color);
-    --background-primary: var(--bg-color);
-    --background-secondary: var(--bg-color);
-    --background-primary-alt: var(--secondary-color);
-    --background-secondary-alt: var(--secondary-color);
-    --background-modifier-hover: var(--highlight-color);
-    --background-modifier-active: var(--trinary-color);
-    --background-modifier-border: var(--quaternary-color);
-    --dropdown-background: var(--secondary-color);
-    --interactive-normal: var(--secondary-color);
-    --text-normal: var(--fg-color);
-    --h1-color: var(--fg-color);
-    --h2-color: var(--fg-color);
-    --h3-color: var(--fg-color);
-    --h4-color: var(--fg-color);
-    --h5-color: var(--fg-color);
-    --h6-color: var(--fg-color);
-    --bold-color: var(--fg-color);
-    --code-normal: var(--fg-color);
-    --code-comment: var(--notification-color);
-    --code-background: var(--secondary-color);
-    --hr-color: var(--inactive-color);
-    --text-muted: var(--notification-color);
-    --list-marker-color: var(--notification-color);
-    --font-text-theme: "Fira Code";
-    --font-interface-theme: "Fira Code";
-    --font-monospace-theme: "Fira Code";
-    --font-logo-theme: "Fira Sans Condensed";
-    --line-height-normal: 2;
-    --p-spacing: 2.25rem;
-    --h1-size: 1.875rem;
-    --h1-line-height: 2.25rem;
-    --h2-size: 1.5em;
-    --h2-line-height: 1.3333333;
-    --h3-size: 1.25em;
-    --h3-line-height: 1.6;
-    --h1-weight: 500;
-    --h2-weight: 500;
-    --h3-weight: 500;
-    --text-selection: var(--inactive-color);
-    --link-decoration: none;
-    --link-external-decoration: none;
-    --text-shadow: none;
-    --border-radius: 4px;
-    --font-size: 1em;
-    --article-width: 40rem;
-
-}
-
-    body {
-  font-family: "Fira Code", monospace;
-      background-color: var(--bg-color);
-      color: var(--fg-color); /* Contrasting light foreground color */
-      line-height: 1.6;
-    }
-    main {
-      max-width: 60em;
-      margin: 4em auto;
-      padding: 2em;
-      background-color: var(--bg-color);
-    }
-
-    h1, h2, h3, h4, h5, h6 {
-    color: var(--h1-color);
-    font-size: var(--font-size);
-    font-family: var(--font-interface-theme), monospace;
-    font-style: italic;
-    font-weight: 400;
-    }
-
-    article {
-
-    }
-
-    article:last-child {
-
-    }
-   
-    button {
-      font-family: "Fira Code", monospace;
-      margin-right: 1em;
-      padding: 0.6em 1em;
-      border: 1px solid var(--neutral-color);
-      background-color: transparent;
-      color: var(--fg-color);
-      cursor: pointer;
-      transition: background-color 0.3s, color 0.3s;
+    /* Code blocks — monospace, theme surface, horizontally scrollable */
+    pre {
+      padding: var(--rhythm-sm);
+      margin-bottom: var(--rhythm-md);
+      overflow-x: auto;
+      border-radius: 5px;
+      box-shadow: var(--box-shadow-inset);
+      background-color: var(--surface-alt);
     }
 
     pre code.hljs {
-      font-family: "Fira Code", monospace;
+      font-family: var(--font-mono), monospace;
+      font-size: 0.85em;
+      background: transparent;
+      padding: 0;
+      text-shadow: none;
     }
 
+    /* Inline code — letterpress effect would hurt legibility at small sizes */
+    code {
+      font-family: var(--font-mono), monospace;
+      font-size: 0.85em;
+      background-color: var(--surface-alt);
+      padding: 0.1em 0.35em;
+      border-radius: 3px;
+      text-shadow: none;
+    }
 
+    pre code {
+      background-color: transparent;
+      padding: 0;
+    }
+
+    /* Live demo containers */
+    .demo-box {
+      padding: var(--rhythm-sm);
+      margin-bottom: var(--rhythm-md);
+      border: 1px solid var(--border);
+      border-radius: 5px;
+      background-color: var(--surface);
+    }
+
+    .demo-box p {
+      margin-bottom: var(--rhythm-xs);
+    }
+
+    /* spacing between demo UI and result output */
+    .demo-box button {
+      margin-bottom: var(--rhythm-xs);
+    }
+
+    /* Shell snippet inside the install article */
+    pre.shell {
+      font-family: var(--font-mono), monospace;
+      font-size: 0.85em;
+      text-shadow: none;
+    }
+
+    /* GitHub corner icon */
     github-icon {
       width: 2em;
       height: 2em;
@@ -144,7 +88,7 @@
 </head>
 <body>
 
-  <github-icon light href="https://github.com/DATAROOM-NETWORK/dataroom.js"></github-icon>
+  <github-icon href="https://github.com/DATAROOM-NETWORK/dataroom.js"></github-icon>
 
 
   <main>
