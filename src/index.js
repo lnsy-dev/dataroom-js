@@ -98,9 +98,9 @@ export default class DataroomElement extends HTMLElement {
     if (securityScheme === 'localstorage') {
       const bearer_token = localStorage.getItem('bearer-token');
       headers['Authorization'] = `Bearer ${bearer_token}`;
-    } else if (securityScheme === 'cookie') {
-      // Cookies are sent automatically by the browser, so no special handling is needed here.
     }
+    // With security-scheme="cookie", cookies are sent automatically by the
+    // browser, so no header handling is needed.
 
     const controller = new AbortController();
     const signal = controller.signal;
@@ -183,11 +183,18 @@ export default class DataroomElement extends HTMLElement {
    * @returns {void}
    */
   connectedCallback() {
+    if (this._initialized) {
+      // Reconnected after a disconnect: resume attribute observation,
+      // but never re-run initialization (children already exist).
+      this.observeAttributeChanges();
+      return;
+    }
     if (document.readyState !== 'loading') {
       this.preInit();
       return;
     }
-    document.addEventListener('DOMContentLoaded', () => this.preInit());
+    this._onDomContentLoaded = () => this.preInit();
+    document.addEventListener('DOMContentLoaded', this._onDomContentLoaded, { once: true });
   }
 
   /**
@@ -195,15 +202,18 @@ export default class DataroomElement extends HTMLElement {
    * @returns {void}
   */
   async preInit(){
+    if (this._initialized || !this.isConnected) return;
+    this._initialized = true;
 
     this.content = this.innerText; 
     this.attrs = this.getAttributeNames().reduce((acc, name) => {
       return { ...acc, [name]: this.getAttribute(name) };
     }, {});
+    this.verbose = this.getAttribute('verbose') === 'true';
     this.classList.add('dataroom-element');
     this.observeAttributeChanges();
 
-    this.initialize();
+    await this.initialize();
   }
 
 
@@ -217,7 +227,9 @@ export default class DataroomElement extends HTMLElement {
     for (const [key, value] of Object.entries(data)) {
       await this.setAttribute(key, value);
     }
-    this.render();
+    if (typeof this.render === 'function') {
+      this.render();
+    }
   }
 
 
@@ -230,16 +242,14 @@ export default class DataroomElement extends HTMLElement {
     this.log("observing attribute changes");
     this.attributeObserver = new MutationObserver((mutations) => {
       mutations.forEach((mutation) => {
-        if (mutation.type === "attributes") {
-          this.attrs[mutation.attributeName] = this.getAttribute(
-            mutation.attributeName,
-          );
-          this.event("NODE-CHANGED", {
-            attribute: mutation.attributeName,
-            oldValue: mutation.oldValue,
-            newValue: this.getAttribute(mutation.attributeName),
-          });
-        }
+        this.attrs[mutation.attributeName] = this.getAttribute(
+          mutation.attributeName,
+        );
+        this.event("NODE-CHANGED", {
+          attribute: mutation.attributeName,
+          oldValue: mutation.oldValue,
+          newValue: this.getAttribute(mutation.attributeName),
+        });
       });
     });
     const config = { attributes: true, attributeOldValue: true };
@@ -262,7 +272,17 @@ export default class DataroomElement extends HTMLElement {
    */
   disconnectedCallback() {
     this.log("disconnecting...");
-    this.disconnect();
+    if (this._onDomContentLoaded) {
+      document.removeEventListener('DOMContentLoaded', this._onDomContentLoaded);
+      this._onDomContentLoaded = null;
+    }
+    if (this.attributeObserver) {
+      this.attributeObserver.disconnect();
+      this.attributeObserver = null;
+    }
+    if (this._initialized) {
+      this.disconnect();
+    }
   }
 
   /**

@@ -1,6 +1,6 @@
 {
   "name": "dataroom-js",
-  "version": "0.7.5",
+  "version": "0.7.6",
   "description": "The core component behind dataroom.js",
   "main": "src/index.js",
   "type": "module",
@@ -8,7 +8,9 @@
     "src"
   ],
   "scripts": {
-    "start":"npx live-server"
+    "start": "npx live-server",
+    "test": "node --test \"test/*.test.js\"",
+    "test:mutation": "stryker run"
   },
   "repository": {
     "type": "git",
@@ -24,5 +26,9 @@
   "bugs": {
     "url": "https://github.com/DATAROOM-NETWORK/dataroom.js/issues"
   },
-  "homepage": "https://github.com/DATAROOM-NETWORK/dataroom.js#readme"
+  "homepage": "https://github.com/DATAROOM-NETWORK/dataroom.js#readme",
+  "devDependencies": {
+    "@stryker-mutator/core": "^10.0.0",
+    "jsdom": "^30.0.1"
+  }
 }

@@ -11,7 +11,7 @@ npm install dataroom-js --save
 or you can import via CDN:
 
 ```js
-import DataroomElement from "https://unpkg.com/dataroom-js@0.7.5/src/index.js";
+import DataroomElement from "https://unpkg.com/dataroom-js@0.7.6/src/index.js";
 ```
 
 ## Basic Usage

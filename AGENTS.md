@@ -43,7 +43,7 @@ import DataroomElement from 'dataroom-js';
 ### Alternative: CDN (Secondary option)
 
 ```javascript
-import DataroomElement from 'https://unpkg.com/dataroom-js@0.7.5/src/index.js';
+import DataroomElement from 'https://unpkg.com/dataroom-js@0.7.6/src/index.js';
 ```
 
 **Note for AI Agents**: Always prefer the npm import in generated code unless the user specifically requests CDN usage.
